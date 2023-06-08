@@ -4,7 +4,7 @@ dotenv.config();
 
 const dbConnect = async (): Promise<void> => {
   const connectionParams = { useNewUrlParser: true };
-  await mongoose.connect(process.env.DB as string, connectionParams as object);
+  await mongoose.connect("mongodb://localhost:27017/taskManager", connectionParams as object);
 
   mongoose.connection.on('connected', (): void => {
     console.log('Connected to database successfully');

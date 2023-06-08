@@ -1,9 +1,13 @@
 import express from 'express'
-import { config } from "dotenv";
+// import { config } from "dotenv";
+import dotenv from 'dotenv';
+dotenv.config();
 import cors from "cors";
-import dbConnect from "./app/config/database.config.js";
-import taskRoutes from "./app/routes/task.route.js"
-config();
+import dbConnect from "./config/database.config";
+import taskRoutes from "./routes/task.route"
+
+// config();
+
 dbConnect();
 const app = express();
 
@@ -13,7 +17,8 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use("/api/tasks", taskRoutes);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+app.listen("8000", () => {
+    console.log(`Server is running on port ${8000}`);
 }
 );
+
