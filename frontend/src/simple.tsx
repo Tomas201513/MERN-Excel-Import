@@ -31,15 +31,15 @@ const App: React.FC = () => {
     <div className="App">
       <input type="file" onChange={handleFileUpload} />
       <table>
-        <thead>
-          {/* <tr>
+        {/* <thead>
+          <tr>
             <th>Item No</th>
             <th>Item Name</th>
             <th>Item Description</th>
             <th>Item Price</th>
             <th>Item Image</th>
-          </tr> */}
-        </thead>
+          </tr>
+        </thead> */}
         <tbody>
           {data.map((row, index) => (
             <tr key={index}>
@@ -48,7 +48,6 @@ const App: React.FC = () => {
               <td>{row[2]}</td>
               <td>{row[3]}</td>
               <td>{row[4]}</td>
-              <td>{row[5]}</td>
             </tr>
           ))}
         </tbody>
