@@ -3,15 +3,34 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
-    title: {
+    id: {   
         type: String,
         required: true
     },
-    description: String,
-    status: {
-        type: Boolean,
-        default: false
-    }
-});
+    Description: {
+        type: Object,
+        required: true
+    },
+    Unit : {
+        type: String,
+        required: true
+    },
+    Quantity: {
+        type: Number,
+        required: true
+    },
+    Rate : {
+        type: Number,
+        required: true
+    },
+    Amount : {
+        type: Number,
+        required: true
+    },
+}
+);
 
-export default mongoose.model('Task', TaskSchema);
+const Task = mongoose.model('Task', TaskSchema);
+
+export default Task;
+    

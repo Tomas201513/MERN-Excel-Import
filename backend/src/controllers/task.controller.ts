@@ -44,15 +44,13 @@ const taskController = {
   update: async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
-      const { title, description } = req.body;
-      const updatedTask = await Task.findByIdAndUpdate(
-        id,
-        {
-          title,
-          description,
-        },
-        { new: true }
-      );
+      const { Description, Unit, Quantity, Rate, Amount } = req.body;
+      const updatedTask = await Task.findByIdAndUpdate( id, { Description, Unit, Quantity, Rate, Amount }, { new: true });
+      if (!updatedTask) {
+        return res.status(404).json({
+          message: 'Task not found',
+        });
+      }
       return res.json(updatedTask);
     } catch (error) {
       return res.status(500).json({
@@ -61,18 +59,22 @@ const taskController = {
     }
   },
   delete: async (req: Request, res: Response): Promise<Response> => {
+
     try {
       const { id } = req.params;
-      await Task.findByIdAndDelete(id);
-      return res.json({
-        message: 'Task deleted',
-      });
+      const deletedTask = await Task.findByIdAndDelete(id);
+      if (!deletedTask) {
+        return res.status(404).json({
+          message: 'Task not found',
+        });
+      }
+      return res.json(deletedTask);
     } catch (error) {
       return res.status(500).json({
         message: error.message,
       });
     }
-  },
+  }
 };
 
 export default taskController;
