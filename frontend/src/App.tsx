@@ -29,30 +29,55 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <input type="file" onChange={handleFileUpload} />
-      <table>
-        <thead>
-          {/* <tr>
-            <th>Item No</th>
-            <th>Item Name</th>
-            <th>Item Description</th>
-            <th>Item Price</th>
-            <th>Item Image</th>
-          </tr> */}
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>{row[0]}</td>
-              <td>{row[1]}</td>
-              <td>{row[2]}</td>
-              <td>{row[3]}</td>
-              <td>{row[4]}</td>
-              <td>{row[5]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Typography variant="h4" gutterBottom>
+        Import Excel
+      </Typography>
+      <Box sx={{ display: "flex", JustifyContent: "center", Space: 2 }}>
+        <Input type="file" onChange={handleFileUpload} />
+        <Box sx={{ flexGrow: 1 }} />
+        <Button variant="contained" color="primary" sx={{ ml: 2 }}>
+          Commit to DB
+        </Button>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Item No</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Subcategory</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Unit</TableCell>
+              <TableCell>Qty</TableCell>
+              <TableCell>Rate</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>{item["Item No"]}</TableCell>
+                <TableCell>{item["Description"]["catagory"]}</TableCell>
+                <TableCell>{item["Description"]["subcatagory"]}</TableCell>
+                <TableCell>{item["Description"]["description"]}</TableCell>
+                <TableCell>{item["Unit"]}</TableCell>
+                <TableCell>{item["Qty"]}</TableCell>
+                <TableCell>{item["Rate"]}</TableCell>
+                <TableCell>{item["Amount"]}</TableCell>
+                <TableCell sx={{ display: "flex" }}>
+                  <IconButton color="primary">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

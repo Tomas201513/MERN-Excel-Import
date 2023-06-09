@@ -1,52 +1,100 @@
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { handleFileUpload } from "../../utils/FileUpload";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+  IconButton,
+  Input,
+  Box,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ChangeEvent } from "react";
+import * as XLSX from "xlsx";
 
 export default function BasicTable() {
   const [data, setData] = React.useState<any[][]>([]);
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (evt: ProgressEvent<FileReader>) => {
+        if (evt.target) {
+          const bstr = evt.target.result as string;
+          const wb = XLSX.read(bstr, { type: "binary" });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+
+          const sheetData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+          setData(sheetData);
+
+          console.log(sheetData);
+        }
+      };
+
+      reader.readAsBinaryString(file);
+    }
+  };
   return (
     <>
       <input type="file" onChange={handleFileUpload} />;{data}
-      {/* <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-                <TableCell align="right">
-                  <button>Edit</button>
-                  <button>Delete</button>
-                </TableCell>
+      <div className="App">
+        <Typography variant="h4" gutterBottom>
+          Import Excel
+        </Typography>
+        <Box sx={{ display: "flex", JustifyContent: "center", Space: 2 }}>
+          <Input type="file" onChange={handleFileUpload} />
+          <Box sx={{ flexGrow: 1 }} />
+          <Button variant="contained" color="primary" sx={{ ml: 2 }}>
+            Commit to DB
+          </Button>
+        </Box>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Item No</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>Subcategory</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Unit</TableCell>
+                <TableCell>Qty</TableCell>
+                <TableCell>Rate</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+            </TableHead>
+            <TableBody>
+              {data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{item["Item No"]}</TableCell>
+                  <TableCell>{item["Description"]["catagory"]}</TableCell>
+                  <TableCell>{item["Description"]["subcatagory"]}</TableCell>
+                  <TableCell>{item["Description"]["description"]}</TableCell>
+                  <TableCell>{item["Unit"]}</TableCell>
+                  <TableCell>{item["Qty"]}</TableCell>
+                  <TableCell>{item["Rate"]}</TableCell>
+                  <TableCell>{item["Amount"]}</TableCell>
+                  <TableCell sx={{ display: "flex" }}>
+                    <IconButton color="primary">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </>
   );
 }
